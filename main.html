@@ -3,13 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vintage Shopping List</title>
+    <title>Shared Shopping List</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+    
+    <script>
+        // Initialize Firebase (Replace with your Firebase configuration)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBOuLEJq62q4II7PyrxTEVMSm-m7V_1MB4",
+            authDomain: "shoppinglist-55f9a.firebaseapp.com",
+            databaseURL: "https://shoppinglist-55f9a-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "shoppinglist-55f9a",
+            storageBucket: "shoppinglist-55f9a.appspot.com",
+            messagingSenderId: "66310600403",
+            appId: "1:66310600403:web:aafe121d1949445e508626",
+            measurementId: "G-8BZFSHJ0R6"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+    </script>
 </head>
 <body>
+    <!-- Header Section -->
     <header class="header">
-        <h1>Shopping List</h1>
+        <h1>Shared Shopping List</h1>
     </header>
+
+    <!-- Main Section -->
     <main>
         <!-- Input fields for item name and quantity -->
         <div class="input-container">
@@ -23,11 +46,70 @@
             <!-- Shopping list items will be displayed here -->
         </div>
     </main>
+
+    <!-- Footer Section -->
     <footer>
-        <p>Created by NAMzE</p>
+        <p>Created with vintage charm and real-time sharing.</p>
     </footer>
 
-    <!-- Link to the JavaScript file -->
-    <script src="script.js"></script>
+    <!-- JavaScript for the shopping list functionality -->
+    <script>
+        // Reference to the shopping list in Firebase
+        const listRef = firebase.database().ref('shoppingList');
+
+        // Function to add an item to Firebase
+        function addItem() {
+            const itemName = document.getElementById("itemName").value.trim();
+            const itemQuantity = parseInt(document.getElementById("itemQuantity").value);
+
+            if (itemName === "" || isNaN(itemQuantity) || itemQuantity < 1) {
+                alert("Please enter a valid item name and quantity.");
+                return;
+            }
+
+            // Push the new item to Firebase
+            listRef.push({
+                name: itemName,
+                quantity: itemQuantity
+            });
+
+            // Clear input fields
+            document.getElementById("itemName").value = "";
+            document.getElementById("itemQuantity").value = "1";
+        }
+
+        // Function to remove an item from Firebase
+        function removeItem(itemId) {
+            listRef.child(itemId).remove();
+        }
+
+        // Function to display the list items in real-time
+        function displayList() {
+            const listContainer = document.getElementById("list-container");
+            listContainer.innerHTML = "";
+
+            listRef.on("value", (snapshot) => {
+                listContainer.innerHTML = ""; // Clear the list container
+
+                snapshot.forEach((childSnapshot) => {
+                    const item = childSnapshot.val();
+                    const itemId = childSnapshot.key;
+                    
+                    const itemElement = document.createElement("div");
+                    itemElement.className = "item";
+
+                    itemElement.innerHTML = `
+                        <span>${item.name} - Quantity: ${item.quantity}</span>
+                        <button onclick="removeItem('${itemId}')">Remove</button>
+                    `;
+                    
+                    listContainer.appendChild(itemElement);
+                });
+            });
+        }
+
+        // Initial call to display list
+        displayList();
+    </script>
 </body>
 </html>
