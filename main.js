@@ -3,6 +3,7 @@ const listRef = firebase.database().ref('shoppingList');
 
 // Function to add an item to Firebase
 function addItem() {
+    console.log("Add Item function triggered");
     const itemName = document.getElementById("itemName").value.trim();
     const itemQuantity = parseInt(document.getElementById("itemQuantity").value);
 
