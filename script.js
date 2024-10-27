@@ -1,6 +1,6 @@
 // Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -40,6 +40,12 @@ window.addItem = function () {
     document.getElementById("itemQuantity").value = "1";
 };
 
+// Remove item function
+function removeItem(itemKey) {
+    const itemRef = ref(database, `shoppingList/${itemKey}`);
+    remove(itemRef);
+}
+
 // Retrieve and display items from Firebase
 function displayItems() {
     onValue(listRef, (snapshot) => {
@@ -47,9 +53,18 @@ function displayItems() {
         itemsContainer.innerHTML = ""; // Clear existing items
         snapshot.forEach((childSnapshot) => {
             const item = childSnapshot.val();
+            const itemKey = childSnapshot.key; // Get the key for each item
             const itemElement = document.createElement("div");
             itemElement.classList.add("item");
             itemElement.textContent = `${item.name} - Quantity: ${item.quantity}`;
+
+            // Create a remove button
+            const removeButton = document.createElement("button");
+            removeButton.textContent = "Remove";
+            removeButton.classList.add("remove-button");
+            removeButton.onclick = () => removeItem(itemKey); // Bind remove function
+
+            itemElement.appendChild(removeButton);
             itemsContainer.appendChild(itemElement);
         });
     });
