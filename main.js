@@ -1,9 +1,7 @@
-// JavaScript for adding, listing, and removing items from the shopping list
+// Reference to the shopping list in Firebase
+const listRef = firebase.database().ref('shoppingList');
 
-// Array to store list items
-let shoppingList = [];
-
-// Function to add an item to the list
+// Function to add an item to Firebase
 function addItem() {
     const itemName = document.getElementById("itemName").value.trim();
     const itemQuantity = parseInt(document.getElementById("itemQuantity").value);
@@ -13,37 +11,46 @@ function addItem() {
         return;
     }
 
-    // Add the item to the shopping list
-    shoppingList.push({ name: itemName, quantity: itemQuantity });
-    
+    // Push the new item to Firebase
+    listRef.push({
+        name: itemName,
+        quantity: itemQuantity
+    });
+
     // Clear input fields
     document.getElementById("itemName").value = "";
     document.getElementById("itemQuantity").value = "1";
-
-    // Update the list display
-    displayList();
 }
 
-// Function to remove an item from the list
-function removeItem(index) {
-    shoppingList.splice(index, 1);
-    displayList();
+// Function to remove an item from Firebase
+function removeItem(itemId) {
+    listRef.child(itemId).remove();
 }
 
 // Function to display the list items
 function displayList() {
     const listContainer = document.getElementById("list-container");
-    listContainer.innerHTML = ""; // Clear the list container
+    listContainer.innerHTML = "";
 
-    shoppingList.forEach((item, index) => {
-        const itemElement = document.createElement("div");
-        itemElement.className = "item";
+    listRef.on("value", (snapshot) => {
+        listContainer.innerHTML = ""; // Clear the list container
 
-        itemElement.innerHTML = `
-            <span>${item.name} - Quantity: ${item.quantity}</span>
-            <button onclick="removeItem(${index})">Remove</button>
-        `;
-        
-        listContainer.appendChild(itemElement);
+        snapshot.forEach((childSnapshot) => {
+            const item = childSnapshot.val();
+            const itemId = childSnapshot.key;
+            
+            const itemElement = document.createElement("div");
+            itemElement.className = "item";
+
+            itemElement.innerHTML = `
+                <span>${item.name} - Quantity: ${item.quantity}</span>
+                <button onclick="removeItem('${itemId}')">Remove</button>
+            `;
+            
+            listContainer.appendChild(itemElement);
+        });
     });
 }
+
+// Initial call to display list
+displayList();
