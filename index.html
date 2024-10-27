@@ -3,158 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shared Shopping List</title>
-    <link rel="stylesheet" href="main.css">
-    <script src="main.js" defer></script> 
-    
-       <script type="module">
-          document.addEventListener("DOMContentLoaded", () => {
-            // Import the functions you need from the SDKs
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-            import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-            
-            // Firebase configuration
-            const firebaseConfig = {
-              apiKey: "AIzaSyBOuLEJq62q4II7PyrxTEVMSm-m7V_1MB4",
-              authDomain: "shoppinglist-55f9a.firebaseapp.com",
-              databaseURL: "https://shoppinglist-55f9a-default-rtdb.asia-southeast1.firebasedatabase.app",
-              projectId: "shoppinglist-55f9a",
-              storageBucket: "shoppinglist-55f9a.appspot.com",
-              messagingSenderId: "66310600403",
-              appId: "1:66310600403:web:aafe121d1949445e508626",
-              measurementId: "G-8BZFSHJ0R6"
-            };
-            
-            // Initialize Firebase and Database
-            const app = initializeApp(firebaseConfig);
-            const database = getDatabase(app);
-        
-            // Reference to the "shoppingList" database path
-            const listRef = ref(database, 'shoppingList');
-        
-            // Add item function
-            window.addItem = function () {
-              const itemName = document.getElementById("itemName").value.trim();
-              const itemQuantity = parseInt(document.getElementById("itemQuantity").value);
-        
-              if (itemName === "" || isNaN(itemQuantity) || itemQuantity < 1) {
-                alert("Please enter a valid item name and quantity.");
-                return;
-              }
-        
-              // Push new item to Firebase
-              push(listRef, {
-                name: itemName,
-                quantity: itemQuantity
-              });
-        
-              // Clear input fields
-              document.getElementById("itemName").value = "";
-              document.getElementById("itemQuantity").value = "1";
-            };
-        
-            // Retrieve and display items from Firebase
-            function displayItems() {
-              onValue(listRef, (snapshot) => {
-                const itemsContainer = document.getElementById("itemsContainer");
-                itemsContainer.innerHTML = ""; // Clear existing items
-                snapshot.forEach((childSnapshot) => {
-                  const item = childSnapshot.val();
-                  const itemElement = document.createElement("div");
-                  itemElement.textContent = `${item.name} - Quantity: ${item.quantity}`;
-                  itemsContainer.appendChild(itemElement);
-                });
-              });
-            }
-        
-            // Display items on load
-            displayItems();
-          });
-        </script>
-
-
+    <title>Shopping List</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to the CSS file -->
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="header">
-        <h1>Shared Shopping List</h1>
-    </header>
-
-    <!-- Main Section -->
-    <main>
-        <!-- Input fields for item name and quantity -->
-        <div id="addItemContainer">
-          <input type="text" id="itemName" placeholder="Item Name">
-          <input type="number" id="itemQuantity" placeholder="Quantity" min="1" value="1">
-          <button onclick="addItem()">Add Item</button>
-        </div>
-        
-        <div id="itemsContainer"></div>
-    </main>
-
-    <!-- Footer Section -->
-    <footer>
-        <p>Created with vintage charm and real-time sharing.</p>
-    </footer>
-
-    <!-- JavaScript for the shopping list functionality -->
-    <script>
-        // Reference to the shopping list in Firebase
-        const listRef = firebase.database().ref('shoppingList');
-
-        // Function to add an item to Firebase
-        function addItem() {
-            const itemName = document.getElementById("itemName").value.trim();
-            const itemQuantity = parseInt(document.getElementById("itemQuantity").value);
-
-            if (itemName === "" || isNaN(itemQuantity) || itemQuantity < 1) {
-                alert("Please enter a valid item name and quantity.");
-                return;
-            }
-
-            // Push the new item to Firebase
-            listRef.push({
-                name: itemName,
-                quantity: itemQuantity
-            });
-
-            // Clear input fields
-            document.getElementById("itemName").value = "";
-            document.getElementById("itemQuantity").value = "1";
-        }
-
-        // Function to remove an item from Firebase
-        function removeItem(itemId) {
-            listRef.child(itemId).remove();
-        }
-
-        // Function to display the list items in real-time
-        function displayList() {
-            const listContainer = document.getElementById("list-container");
-            listContainer.innerHTML = "";
-
-            listRef.on("value", (snapshot) => {
-                listContainer.innerHTML = ""; // Clear the list container
-
-                snapshot.forEach((childSnapshot) => {
-                    const item = childSnapshot.val();
-                    const itemId = childSnapshot.key;
-                    
-                    const itemElement = document.createElement("div");
-                    itemElement.className = "item";
-
-                    itemElement.innerHTML = `
-                        <span>${item.name} - Quantity: ${item.quantity}</span>
-                        <button onclick="removeItem('${itemId}')">Remove</button>
-                    `;
-                    
-                    listContainer.appendChild(itemElement);
-                });
-            });
-        }
-
-        // Initial call to display list
-        displayList();
-    </script>
+    <h1>Shopping List</h1>
+    <div id="addItemContainer">
+        <input type="text" id="itemName" placeholder="Item Name" required>
+        <input type="number" id="itemQuantity" placeholder="Quantity" min="1" value="1" required>
+        <button onclick="addItem()">Add Item</button>
+    </div>
+    <div id="itemsContainer"></div>
+    
+    <script type="module" src="script.js"></script> <!-- Link to the JavaScript file -->
 </body>
 </html>
