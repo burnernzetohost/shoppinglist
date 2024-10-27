@@ -1,6 +1,6 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #fdf6e3; /* Light cream color */
     color: #333;
     margin: 0;
     padding: 20px;
@@ -9,8 +9,26 @@ body {
     align-items: center;
 }
 
+.container {
+    max-width: 600px;
+    border: 1px solid #d6cfcf;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f3e9e5; /* Light background for the container */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 1px 1px 2px #ccc;
+}
+
 #addItemContainer {
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
 }
 
 input {
@@ -27,6 +45,7 @@ button {
     background-color: #007BFF;
     color: white;
     cursor: pointer;
+    font-weight: bold;
 }
 
 button:hover {
@@ -45,4 +64,20 @@ button:hover {
     margin-bottom: 5px;
     border-radius: 4px;
     background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.remove-button {
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-button:hover {
+    background-color: #c82333;
 }
