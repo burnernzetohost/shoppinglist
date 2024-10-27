@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage Shopping List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <h1>Shopping List</h1>
+    </header>
+    <main>
+        <!-- Input fields for item name and quantity -->
+        <div class="input-container">
+            <input type="text" id="itemName" placeholder="Item Name">
+            <input type="number" id="itemQuantity" placeholder="Quantity" min="1" value="1">
+            <button onclick="addItem()">Add Item</button>
+        </div>
+
+        <!-- Container for the shopping list -->
+        <div id="list-container" class="list-container">
+            <!-- Shopping list items will be displayed here -->
+        </div>
+    </main>
+    <footer>
+        <p>Created by NAMzE</p>
+    </footer>
+
+    <!-- Link to the JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
