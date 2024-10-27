@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="style.css"> <!-- Link to the CSS file -->
 </head>
 <body>
-    <h1>Shopping List</h1>
-    <div id="addItemContainer">
-        <input type="text" id="itemName" placeholder="Item Name" required>
-        <input type="number" id="itemQuantity" placeholder="Quantity" min="1" value="1" required>
-        <button onclick="addItem()">Add Item</button>
+    <div class="container">
+        <h1>Shopping List</h1>
+        <div id="addItemContainer">
+            <input type="text" id="itemName" placeholder="Item Name" required>
+            <input type="number" id="itemQuantity" placeholder="Quantity" min="1" value="1" required>
+            <button onclick="addItem()">Add Item</button>
+        </div>
+        <div id="itemsContainer"></div>
     </div>
-    <div id="itemsContainer"></div>
     
     <script type="module" src="script.js"></script> <!-- Link to the JavaScript file -->
 </body>
