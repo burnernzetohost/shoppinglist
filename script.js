@@ -22,24 +22,24 @@ const listRef = ref(database, 'shoppingList');
 // Add item function
 window.addItem = function () {
     const itemName = document.getElementById("itemName").value.trim();
-    const itemQuantity = parseInt(document.getElementById("itemQuantity").value);
+    const itemQuantity = document.getElementById("itemQuantity").value.trim(); // Keep it as a string
 
-    if (itemName === "" || isNaN(itemQuantity) || itemQuantity < 1) {
+    // Check if item name and quantity are valid
+    if (itemName === "" || itemQuantity === "") {
         alert("Please enter a valid item name and quantity.");
         return;
     }
 
-    // Push new item to Firebase
+    // Push new item to Firebase with quantity as a string
     push(listRef, {
         name: itemName,
-        quantity: itemQuantity
+        quantity: itemQuantity // No need to parse as an integer
     });
 
     // Clear input fields
     document.getElementById("itemName").value = "";
     document.getElementById("itemQuantity").value = "1";
 };
-
 // Remove item function
 function removeItem(itemKey) {
     const itemRef = ref(database, `shoppingList/${itemKey}`);
